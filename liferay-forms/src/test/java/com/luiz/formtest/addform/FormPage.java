@@ -5,28 +5,26 @@ import org.openqa.selenium.By;
 import com.luiz.formtest.PageObject;
 import com.luiz.formtest.successpage.SuccessPage;
 
+import dataproviders.ConfigFileReader;
+
 public class FormPage extends PageObject {
+	
+	ConfigFileReader configFileReader;
 
 	public FormPage() {
 		super(null);
-		browser.navigate().to(url_form);
+		configFileReader = new ConfigFileReader();
+		browser.navigate().to(configFileReader.getXpath("url"));
 	}
 
-	private static final String url_form = "https://forms.liferay.com/web/forms/shared/-/form/122548";
-	
-	private static By xpath_date = By.xpath("//*[@name='datePicker']/following-sibling::*[contains(@dir,'ltr')]");
-	private static By xpath_player = By.xpath("//label[contains(text(),'soccer player')]/following-sibling::*[contains(@dir,'ltr')]");
-	private static By xpath_whyTesting = By.xpath("//label[contains(text(),'testing area')]/following-sibling::*[contains(@dir,'ltr')]");
-	private static By xpath_submit = By.xpath("//button[@type='submit' and not (@hidden)]");	
-
 	public void fillForms(String playerName, String date, String whyTesting) {
-		browser.findElement(xpath_player).sendKeys(playerName);
-		browser.findElement(xpath_date).sendKeys(date);
-		browser.findElement(xpath_whyTesting).sendKeys(whyTesting);
+		browser.findElement(By.xpath(configFileReader.getXpath("favoritePlayer"))).sendKeys(playerName);
+		browser.findElement(By.xpath(configFileReader.getXpath("dateLiferay"))).sendKeys(date);
+		browser.findElement(By.xpath(configFileReader.getXpath("whyTesting"))).sendKeys(whyTesting);
 	}
 	
 	public SuccessPage submitForms() {
-		browser.findElement(xpath_submit).submit();
+		browser.findElement(By.xpath(configFileReader.getXpath("submit"))).submit();
 		return new SuccessPage(browser);
 	}
 }
